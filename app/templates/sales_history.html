@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Order History</h1>
+{% if orders %}
+<ul class="list-group">
+    {% for order in orders %}
+    <li class="list-group-item">
+        <h5>Order #{{ order.id }} - ${{ order.total_price }}</h5>
+        <p>Date: {{ order.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+        <ul>
+            {% for item in order.order_items %}
+            <li>{{ item.product.name }} - {{ item.quantity }} pcs @ ${{ item.product.price }} each (Total: ${{ item.total_price }})</li>
+            {% endfor %}
+        </ul>
+    </li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>No orders found.</p>
+{% endif %}
+{% endblock %}

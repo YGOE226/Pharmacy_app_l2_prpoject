@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pharmacy Management</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Ajouter une image de fond à la barre de navigation */
+       
+        .navbar{
+            top: 0;
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+            background-image: url('./download(4).png'); /* Remplacez par le chemin vers votre image */
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .content-wrapper {
+            padding-top: 50px;
+        }
+        body{
+            background-color: #D3E3B7;
+            color: #42505f;
+            border: 20px solid #a9bacb;
+        }
+        .nav-link-active {
+            font-weight: bold;
+            font-size: 1.2rem;
+            background-color: #D3E3B7;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-md navbar-light bg-light">
+        <a class="navbar-brand" href="{{ url_for('index') }}">
+            <img src="{{ url_for('static', filename='images/download.png') }}" alt="Logo" style="height: 40px; color: #4CAF50;">
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link {% if request.endpoint == 'manage_products' %}nav-link-active{% endif %}" href="{{ url_for('manage_products') }}" style="color: #4CAF50;font-weight:bold;">Products</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if request.endpoint == 'manage_orders' %}nav-link-active{% endif %}" href="{{ url_for('manage_orders') }}" style="color: #4CAF50;font-weight:bold;">Orders</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if request.endpoint == 'create_order' %}nav-link-active{% endif %}" href="{{ url_for('create_order') }}" style="color: #4CAF50;font-weight:bold;">Create Order</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if request.endpoint == 'sales_history' %}nav-link-active{% endif %}" href="{{ url_for('sales_history') }}" style="color: #4CAF50;font-weight:bold;">Sales History</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if request.endpoint == 'low_stock_alerts' %}nav-link-active{% endif %}" href="{{ url_for('low_stock_alerts') }}" style="color: #4CAF50;font-weight:bold;">Low Stock Alerts</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav ml-auto">
+                {% if 'user_id' in session %}
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'logout' %}nav-link-active{% endif %}" href="{{ url_for('logout') }}" style="color: #4CAF50;font-weight:bold;">Logout</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'login' %}nav-link-active{% endif %}" href="{{ url_for('login') }}" style="color: #4CAF50;font-weight:bold;">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'register' %}nav-link-active{% endif %}" href="{{ url_for('register') }}" style="color: #4CAF50;font-weight:bold;" >Register</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+    <div class="content-wrapper">
+        <div class="container">
+            {% with messages = get_flashed_messages(with_categories=True) %}
+                {% if messages %}
+                    <div class="flash-messages">
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                                {{ message }}
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+        </div>
+        <div class="container mt-4">
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+    
+    <!-- Inclusion des scripts Bootstrap -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Create Order</h1>
+
+<!-- Formulaire de recherche de produits -->
+<form method="GET" action="{{ url_for('create_order') }}">
+    <input type="text" name="search" placeholder="Search product..." value="{{ request.args.get('search', '') }}">
+    <button type="submit" class="btn btn-primary">Search</button>
+</form>
+
+<!-- Formulaire pour ajouter des produits à la commande -->
+<form method="POST" action="{{ url_for('add_to_cart') }}">
+    <select name="product_id" class="form-control">
+        {% for product in products %}
+            <option value="{{ product.id }}">{{ product.name }} - ${{ product.price }}</option>
+        {% endfor %}
+    </select>
+    <input type="number" name="quantity" class="form-control" placeholder="Quantity" min="1" required>
+    <button type="submit" class="btn btn-success">Add to Order</button>
+</form>
+
+<!-- Afficher les produits dans le panier -->
+<h3>Your Order</h3>
+<ul class="list-group">
+    {% for item in session.get('cart', []) %}
+        <li class="list-group-item">
+            {{ item['quantity'] }} x {{ item['name'] }} - ${{ item['price'] * item['quantity'] }}
+             <!-- Bouton pour supprimer l'article -->
+            <form method="POST" action="{{ url_for('remove_from_cart', product_id=item['product_id']) }}" style="display: inline;">
+                <button type="submit" class="btn btn-danger">Remove</button>
+            </form>
+        </li>
+    {% endfor %}
+</ul>
+
+<!-- Formulaire pour finaliser la commande -->
+<form method="POST" action="{{ url_for('finalize_order') }}">
+    <button type="submit" class="btn btn-primary">Finalize Order</button>
+</form>
+
+{% endblock %}

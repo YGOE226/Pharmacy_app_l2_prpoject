@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Manage Orders</h1>
+<ul class="list-group">
+    {% for order in orders %}
+    <li class="list-group-item">
+        <strong>Order #{{ order.id }}</strong> - Date: {{ order.timestamp }}<br>
+        User ID: {{ order.user_id }}<br>
+        Total Price: {{ order.total_price }} $
+        <ul>
+            {% for item in order.order_items %}
+            <li>
+                Product ID: {{ item.product_id }} - Quantity: {{ item.quantity }} - Total: {{ item.total_price }} $
+            </li>
+            {% endfor %}
+        </ul>
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}
